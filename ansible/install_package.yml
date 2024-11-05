@@ -1,0 +1,20 @@
+---
+- name: Install Git, Apache2, and Net-tools
+  hosts: myvms  # Replace with the name of your host group
+  become: yes  # Allows privilege escalation if required
+
+  tasks:
+    - name: Ensure Git is installed
+      ansible.builtin.package:
+        name: git
+        state: present
+
+    - name: Ensure Apache2 is installed
+      ansible.builtin.package:
+        name: apache2
+        state: present
+
+    - name: Ensure Net-tools is installed
+      ansible.builtin.package:
+        name: net-tools
+        state: present
