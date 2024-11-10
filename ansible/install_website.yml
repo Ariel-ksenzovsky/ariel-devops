@@ -1,0 +1,49 @@
+---
+- name: Deploy an engaging website
+  hosts: myvms
+  become: yes
+  vars:
+    # Define the web server package
+    web_package: apache2
+    # Define the welcome message to include in the HTML file
+    welcome_message: "Welcome to My Dynamic Website!"
+    # Define the content of the HTML file, using the welcome_message variable
+    html_content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>{{ welcome_message }}</title>
+          <style>
+              body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+              h1 { color: #3498db; }
+              p { color: #2c3e50; font-size: 1.2em; }
+          </style>
+      </head>
+      <body>
+          <h1>{{ welcome_message }}</h1>
+          <p>This is a simple website deployed with Ansible. Enjoy exploring!</p>
+      </body>
+      </html>
+
+  tasks:
+    - name: Install web server package
+      ansible.builtin.package:
+        name: "{{ web_package }}"
+        state: present
+
+    - name: Ensure the web server is running and enabled
+      ansible.builtin.service:
+        name: "{{ web_package }}"
+        state: started
+        enabled: true
+
+    - name: Deploy the index.html file with dynamic content
+      ansible.builtin.copy:
+        content: "{{ html_content }}"
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
