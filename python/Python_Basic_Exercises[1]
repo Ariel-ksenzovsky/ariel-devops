@@ -121,5 +121,12 @@ list2 = [4, 5, 6]
 list3 = list1 + list2
 print(list3)
 # question 20
+numbers = [1, 2, 2, 3, 4, 2]
+def remove_all(lst, value):
+    while value in lst:
+        lst.remove(value)
+numbers = [1, 2, 2, 3, 4, 2]
+remove_all(numbers, 2)
+print(numbers)
 
 # question 21
