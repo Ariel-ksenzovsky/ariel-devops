@@ -43,5 +43,5 @@
 ## db-[99:101]-node.example.com
 
 [myvms]
-192.168.68.110 ansible_user=vboxuser ansible_key_file=/home/arielk/.ssh/id_rsa
-192.168.68.110 ansible_user=vboxuser ansible_key_file=/home/arielk/.ssh/id_rsa
+192.168.68.115 ansible_user=vboxuser ansible_key_file=/home/arielk/.ssh/id_rsa
+192.168.68.115 ansible_user=vboxuser ansible_key_file=/home/arielk/.ssh/id_rsa
