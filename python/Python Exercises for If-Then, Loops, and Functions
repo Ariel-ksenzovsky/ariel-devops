@@ -1,0 +1,20 @@
+# If-Then Statements
+# qustion 1
+def how_old_are_you (age) :
+    if age >= 18:
+        print("welcome honey")
+    elif age == 17:
+        print("'Almost there!")
+    else:
+        print("go away little boy")
+
+how_old_are_you(16)
+
+# qustion 2
+# qustion
+# qustion
+# qustion
+# qustion
+# qustion
+# qustion
+
