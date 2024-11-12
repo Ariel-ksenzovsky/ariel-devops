@@ -11,10 +11,65 @@ def how_old_are_you (age) :
 how_old_are_you(16)
 
 # qustion 2
-# qustion
-# qustion
-# qustion
-# qustion
-# qustion
+def Even_or_Odd (number):
+    if number % 2 == 1:
+      print(f"the number {number} is odd ")
+    else:
+        print(f"the number {number} is even")
+
+Even_or_Odd(445)
+
+
+# qustion 3
+def Grading_System (score):
+    if score >= 90 and  score <= 100:
+        print("your grade is A")
+    elif score <= 89 and score >= 80:
+        print("your grage is B")
+    elif score <= 79 and score >= 70:
+        print("your grage is C")
+    elif score <= 69 and score >= 60:
+        print("your grage is D")
+    elif score < 60:
+        print("your grage is F")
+    else:
+        print("ERROR")
+
+Grading_System(100)
+
+# qustion 4
+def Positive_Negative_or_Zero(number):
+    if number > 0:
+        print(f"the number {number} is Positive")
+    elif number < 0:
+        print(f"the number {number} is Negative")
+    else:
+        print(f"the number {number} is Zero")
+
+Positive_Negative_or_Zero(0)
+
+# qustion 5
+def  Eligibility_for_Discount(age, student):
+    if age < 18 or student == "yes":
+        print("You are entitled to a discount")
+    else:
+        print("You are not entitled to a discount")
+
+Eligibility_for_Discount(16, "no")
+
+# For and While Loops
+# qustion 6
+for i in range(1, 11):
+    print(i)
+for i in range(1, 11):
+    if i % 2 == 0:
+        print(i)
+
+# qustion 7
+
+sum = 0
+for num in range(1, 101):
+    sum = sum + num
+print(sum)
 # qustion
 
