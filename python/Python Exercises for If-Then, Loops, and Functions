@@ -71,5 +71,78 @@ sum = 0
 for num in range(1, 101):
     sum = sum + num
 print(sum)
-# qustion
+
+# qustion 8
+def Multiplication_Table(number):
+ for i in range(1, 11):
+    result = number * i
+    print(f"{number} x {i} = {result}")
+Multiplication_Table(20)
+
+# qustion 9
+list = ['red', 'green', 'blue', 'yellow']
+for i in list:
+    print(i)
+    
+# qustion 10
+
+i = 10
+while i > 0:
+    print(i)
+    i -=1
+print('Liftoff')
+
+"""# qustion 11
+
+import random
+number_to_guess = random.randint(1, 10)
+
+while True:
+    
+    user_guess = int(input("Guess the number between 1 and 10: "))
+    
+    if user_guess < number_to_guess:
+        print("Too low! Try again.")
+    elif user_guess > number_to_guess:
+        print("Too high! Try again.")
+    else:
+        print("Congratulations! You guessed the correct number!")
+        break
+    print(f'correct number was {number_to_guess}') """
+
+"""# qustion 12
+total_sum = 0
+
+while True:
+    user_input = int(input("Enter a number (negative to stop): "))
+    
+    if user_input < 0:
+        break 
+    
+    total_sum += user_input
+
+print("The sum of all positive numbers entered is:", total_sum)"""
+
+    
+# Functions
+# qustion 13
+def greet():
+    print("hello, world!")
+greet()
+# qustion 14
+def greeting(name):
+    print(f"hello, {name}")
+greeting("ariel")
+# qustion 15
+def square(num):
+    square.num = num ** 2
+    print(f"the result is {square.num}")
+square(4)
+# qustion 16
+
+# qustion 17
+
+# qustion 18
+
+
 
