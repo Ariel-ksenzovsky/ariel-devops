@@ -15,3 +15,18 @@ print(new_word)
 # and then we defines new variable named "new_word" and puts in it the varible "word" except the
 # first character and merge to it the first charcter from the variable "word"
 # in the end itn print the varible "new_word" and it is the word "elloh"###
+
+# Code 3:
+numbers = [1, 2, 3, 4, 5]
+squared_numbers = [n ** 2 for n in numbers if n % 2 == 1]
+print(squared_numbers)
+
+### the output will be the square of the odds numbers ###
+
+# Code 4:
+    
+fruits = {"apple": 3, "banana": 5, "cherry": 2}
+total = 0
+for fruit in fruits:
+ total += fruits[fruit]
+print(total)
