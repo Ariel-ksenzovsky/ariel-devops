@@ -30,3 +30,24 @@ total = 0
 for fruit in fruits:
  total += fruits[fruit]
 print(total)
+
+### the code will print the number 10, 
+# the code calculating the values for every key summerize it in variable "total" ###
+
+text = "Python"
+result = ""
+for char in text:
+ result = char + result
+print(result)
+
+### the will be "nohtyP" (the reverse word "Python")
+# the code run put each character from the variable "text" (the word "python" is in variable text) 
+# and it put every character right before the proviouscharacter ###
+
+set_a = {1, 2, 3}
+set_b = {2, 3, 4}
+result = set_a.symmetric_difference(set_b)
+print(result)
+
+### the output will be {1, 4},
+# the "symmetric_difference" return to the variable "result" the diffrent values between the sets we provid ###
