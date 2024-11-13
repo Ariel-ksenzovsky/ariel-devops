@@ -1,0 +1,17 @@
+# code 1:
+for i in range(1, 10):
+ if i % 2 == 0:
+   print(i * i)
+### the code make variable "1" to run 
+# between number 1 and 9 and check every time if "i"
+# an even number and if it's even then print the number in a square ###
+
+# Code 2:
+word = "hello"
+new_word = word[1:] + word[0]
+print(new_word)
+
+### the code put the word "hello" in an variable named "word", 
+# and then we defines new variable named "new_word" and puts in it the varible "word" except the
+# first character and merge to it the first charcter from the variable "word"
+# in the end itn print the varible "new_word" and it is the word "elloh"###
