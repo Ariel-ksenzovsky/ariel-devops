@@ -119,7 +119,7 @@
 # data = [10, 20, 30, 40, 50]
 # print(data[-3])
 
-### the will be "30".
+### the output will be "30".
 # the purpose of `-3` in the list indexing is to get third index from the end ###
 
 #Code 13:
@@ -133,6 +133,10 @@
 
 #Code 14:
 
-matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-result = [row[1] for row in matrix]
-print(result)
+# matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+# result = [row[1] for row in matrix]
+# print(result)
+
+###  the output will be [2, 5, 8].
+# the variable "metrix" has list with 3 lists in it.
+# the variable "result" run in each list in the main list and print the second index###
