@@ -55,7 +55,7 @@
 # print(y)
 # print(z)
 
-# x = capitals.get("Germany", "Not sound")
+# x = capitals.get("Germany", "Not Found")
 # print(x)
 
 # # question 5
