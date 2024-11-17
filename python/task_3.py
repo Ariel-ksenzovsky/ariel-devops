@@ -201,12 +201,12 @@
 # Sum_of_List()
     
 # # qustion 21
-# def Prime_Checker(number):
-#     if number % 2 != 0 and number % 3 != 0 and number % 5 != 0 and number % 7 != 0:
-#         print(f"the number {number} is Prime number")
-#     else:
-#         print(f"the number {number} is Composite number")
-# Prime_Checker(10)
+def Prime_Checker(number):
+    if number % 2 != 0 and number % 3 != 0 and number % 5 != 0 and number % 7 != 0:
+        print(f"the number {number} is Prime number")
+    else:
+        print(f"the number {number} is Composite number")
+Prime_Checker(10)
 
 # # qustion 22
 # def Simple_Calculator(a, b, operation):
