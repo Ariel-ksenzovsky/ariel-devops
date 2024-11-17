@@ -24,15 +24,24 @@ import datetime
 # write_journal_entries()
 
 # task 4
-def count_entries_and_words():
-        with open('journal.txt', 'r') as file:
-            entries = file.readlines()
-            
-            num_entries = len(entries)
-            
-            num_words = sum(len(line.split()) for line in entries)
-            
-            print(f"Total number of entries: {num_entries}")
-            print(f"Total number of words: {num_words}")
-    
-count_entries_and_words()
+def read_journal_entries():
+    try:
+        # Open the journal.txt file in read mode
+        with open("journal.txt", 'r') as file:
+            count_line = 0  # To count the number of entries (lines)
+            count_word = 0  # To count the total number of words
+
+            # Iterate over each line in the file
+            for line in file:
+                count_line += 1  # Increment line count for each entry
+                count_word += len(line.split())  # Increment word count by splitting the line into words
+
+        # Print the total number of entries and words
+        print(f"Total number of entries: {count_line}")
+        print(f"Total number of words: {count_word}")
+
+    except FileNotFoundError:
+        print("No journal file found. Please create entries first.")
+
+# Call the function to read the journal entries and count lines and words
+read_journal_entries()
