@@ -1,8 +1,11 @@
 import csv
 from datetime import datetime
-today = datetime.now().strftime("%d.%m.%Y")
+today = datetime.now().strftime("%d.%m")
+today_year = datetime.now().strftime("%y")
+full_today_year = '20' + today_year
 
 print(f"today in {today}, Checks if someone has a birthday...")
+
 def class_names():
     birthday_found = False
    
@@ -10,16 +13,23 @@ def class_names():
         for line in csv_file:
             parts = line.strip().split(",")
             full_name = parts[0] 
-            birth_date = parts[-1] 
+            birth_date = parts[-1].strip()
+
+            if len(birth_date) != 10 or birth_date[2] != '.' or birth_date[5] != '.':
+                print(f"Skipping invalid birth date: {birth_date}")
+                continue
         
-            if birth_date.endswith(today):
-                print(f"Heppy birth day {full_name}!")
+            birth_day_month = birth_date[:5]
+            birth_year = birth_date[-4:]
+            age = int(full_today_year) - int(birth_year) 
+    
+       
+            if birth_day_month == today:
+                print(f"Heppy birthday, {full_name} for your {age} birthday ")
                 birthday_found = True
                 
-        if not birthday_found:
+    if not birthday_found:
             print("Nobody has a birthday today")
 
-        # csv_readr = csv.DictReader(csv_file)
-        # for names in csv_readr:
-        #     print(names)         
+            
 class_names()
