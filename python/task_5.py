@@ -34,7 +34,7 @@ def read_journal_entries():
             # Iterate over each line in the file
             for line in file:
                 count_line += 1  # Increment line count for each entry
-                count_word += len(line.split())  # Increment word count by splitting the line into words
+                count_word += len(line.split("]")[-1].split())  # Increment word count by splitting the line into words
 
         # Print the total number of entries and words
         print(f"Total number of entries: {count_line}")
