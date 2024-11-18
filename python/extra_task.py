@@ -1,8 +1,8 @@
 import csv
 from datetime import datetime
+
 today = datetime.now().strftime("%d.%m")
-today_year = datetime.now().strftime("%y")
-full_today_year = '20' + today_year
+today_year = datetime.now().strftime("%Y")
 
 print(f"today in {today}, Checks if someone has a birthday...")
 
@@ -21,7 +21,7 @@ def class_names():
         
             birth_day_month = birth_date[:5]
             birth_year = birth_date[-4:]
-            age = int(full_today_year) - int(birth_year) 
+            age = int(today_year) - int(birth_year) 
     
        
             if birth_day_month == today:
