@@ -18,14 +18,11 @@ def class_names():
             birth_day = birth_date[0]
             birth_month = birth_date[1]
             birth_year = birth_date[2]
-
-            # if len(birth_date) != 10 or birth_date[2] != '.' or birth_date[5] != '.':
-            #     print(f"Skipping invalid birth date: {birth_date}")
-            #     continue
-        
-            # birth_day_month = birth_date[:5]
-            # birth_year = birth_date[-4:]
+            
+            
             age = int(today_year) - int(birth_year) 
+            if (birth_month, birth_day) > (today_month, today_day):
+                age -= 1
     
        
             if int(birth_day) == int(today_day) and int(birth_month) == int(today_month):
