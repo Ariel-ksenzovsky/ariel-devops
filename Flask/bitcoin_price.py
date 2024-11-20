@@ -1,18 +1,25 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, request
 import requests
 
 app = Flask(__name__)
 
-# פונקציה שמביאה את המחיר הנוכחי של ביטקוין
+# פונקציה לקבלת המחיר הנוכחי של ביטקוין
 def get_bitcoin_price():
     response = requests.get("https://api.coindesk.com/v1/bpi/currentprice.json")
     if response.status_code == 200:
         data = response.json()
-        bitcoin_price = data["bpi"]["USD"]["rate"]
-        return bitcoin_price
+        usd_price = float(data["bpi"]["USD"]["rate"].replace(",", ""))
+        eur_price = float(data["bpi"]["EUR"]["rate"].replace(",", ""))
+        gbp_price = float(data["bpi"]["GBP"]["rate"].replace(",", ""))
+        return {"USD": usd_price, "EUR": eur_price, "GBP": gbp_price}
     return None
 
-# ראוט לדף הבית
+# פונקציה להמרת דולר לשקלים
+def convert_usd_to_ils(usd_price):
+    exchange_rate = 3.8  # שער ההמרה לדולר (לדוגמה)
+    return usd_price * exchange_rate
+
+# דף הבית
 @app.route('/')
 def home():
     return render_template_string("""
@@ -25,7 +32,7 @@ def home():
                     font-family: Arial, sans-serif;
                     background: url('https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg') no-repeat center center fixed;
                     background-size: cover;
-                    color: #000000; /* צבע הטקסט שחור */
+                    color: #000000;
                     text-align: center;
                     padding: 50px;
                 }
@@ -35,7 +42,7 @@ def home():
                 }
                 a {
                     text-decoration: none;
-                    color: #000000; /* צבע הקישורים שחור */
+                    color: #000000;
                     font-size: 1.5em;
                 }
                 a:hover {
@@ -51,77 +58,74 @@ def home():
         </html>
     """)
 
-# ראוט לדף שמציג את המחיר של ביטקוין
-@app.route('/bitcoin')
+# דף מחירי הביטקוין עם אפשרות להמרה
+@app.route('/bitcoin', methods=["GET", "POST"])
 def bitcoin_price():
-    price = get_bitcoin_price()
-    if price:
-        return render_template_string(f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Bitcoin Price</title>
-                <style>
-                    body {{
-                        font-family: Arial, sans-serif;
-                        background: url('https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg') no-repeat center center fixed;
-                        background-size: cover;
-                        color: #000000; /* צבע הטקסט שחור */
-                        text-align: center;
-                        padding: 50px;
-                    }}
-                    h1 {{
-                        font-size: 3em;
-                        margin-bottom: 20px;
-                    }}
-                    .price {{
-                        font-size: 2em;
-                        color: #000000; /* צבע המחיר שחור */
-                    }}
-                    a {{
-                        text-decoration: none;
-                        color: #000000; /* צבע הקישורים שחור */
-                        font-size: 1.5em;
-                    }}
-                    a:hover {{
-                        text-decoration: underline;
-                    }}
-                </style>
-            </head>
-            <body>
-                <h1>Bitcoin Price</h1>
-                <p class="price">${price} USD</p>
-                <a href="/">Go Back</a>
-            </body>
-            </html>
-        """)
-    else:
-        return render_template_string("""
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Error</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background: url('https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg') no-repeat center center fixed;
-                        background-size: cover;
-                        color: #000000; /* צבע הטקסט שחור */
-                        text-align: center;
-                        padding: 50px;
-                    }
-                    h1 {
-                        font-size: 3em;
-                        color: #ff0000; /* הודעת שגיאה באדום */
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Unable to fetch the Bitcoin price.</h1>
-                <a href="/">Go Back</a>
-            </body>
-            </html>
-        """)
+    prices = get_bitcoin_price()
+    converted_price = None
+    target_currency = None
+
+    if request.method == "POST":
+        target_currency = request.form.get("currency")
+        if target_currency == "ILS":
+            converted_price = convert_usd_to_ils(prices["USD"])
+        elif target_currency in prices:
+            converted_price = prices[target_currency]
+
+    # עיצוב המחירים להוספת פסיקים ושתי ספרות אחרי הנקודה
+    if prices:
+        for currency in prices:
+            prices[currency] = f"{prices[currency]:,.2f}"
+        if converted_price:
+            converted_price = f"{converted_price:,.2f}"
+
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Bitcoin Price</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background: url('https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg') no-repeat center center fixed;
+                    background-size: cover;
+                    color: #000000;
+                    text-align: center;
+                    padding: 50px;
+                }
+                h1 {
+                    font-size: 3em;
+                    margin-bottom: 20px;
+                }
+                .price {
+                    font-size: 2em;
+                }
+                button {
+                    padding: 10px 20px;
+                    font-size: 1em;
+                    margin: 10px;
+                    cursor: pointer;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Bitcoin Price</h1>
+            <p class="price">Current Price: ${{ prices['USD'] }} USD</p>
+            
+            <form method="POST">
+                <button type="submit" name="currency" value="EUR">Convert to EUR (€)</button>
+                <button type="submit" name="currency" value="GBP">Convert to GBP (£)</button>
+                <button type="submit" name="currency" value="ILS">Convert to ILS (₪)</button>
+            </form>
+            
+            {% if converted_price %}
+                <p class="price">Converted Price: {{ converted_price }} {{ target_currency }}</p>
+            {% endif %}
+            
+            <a href="/">Go Back</a>
+        </body>
+        </html>
+    """, prices=prices, converted_price=converted_price, target_currency=target_currency)
 
 # הפעלת האפליקציה
 if __name__ == '__main__':
