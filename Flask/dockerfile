@@ -1,5 +1,5 @@
 # שלב בסיסי - בחירת תמונת בסיס
-FROM python:3.9-slim
+FROM python
 
 # הגדרת ספריית העבודה בתוך הקונטיינר
 WORKDIR /app
