@@ -1,0 +1,18 @@
+# שלב בסיסי - בחירת תמונת בסיס
+FROM python:3.9-slim
+
+# הגדרת ספריית העבודה בתוך הקונטיינר
+WORKDIR /app
+
+# העתקת הקבצים מהפרויקט המקומי לתוך הקונטיינר
+COPY requirements.txt requirements.txt
+COPY app.py app.py
+
+# התקנת התלויות
+RUN pip install --no-cache-dir -r requirements.txt
+
+# חשיפת פורט 5000 בקונטיינר
+EXPOSE 5000
+
+# הפקודה שתופעל כאשר הקונטיינר ירוץ
+CMD ["python", "app.py"]
