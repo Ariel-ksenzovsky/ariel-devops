@@ -2,11 +2,11 @@
 FROM python
 
 # הגדרת ספריית העבודה בתוך הקונטיינר
-WORKDIR /app
+WORKDIR /bitcoin_price
 
 # העתקת הקבצים מהפרויקט המקומי לתוך הקונטיינר
 COPY requirements.txt requirements.txt
-COPY app.py app.py
+COPY bitcoin_price.py bitcoin_price.py
 
 # התקנת התלויות
 RUN pip install --no-cache-dir -r requirements.txt
@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
 
 # הפקודה שתופעל כאשר הקונטיינר ירוץ
-CMD ["python", "app.py"]
+CMD ["python", "bitcoin_price.py"]
