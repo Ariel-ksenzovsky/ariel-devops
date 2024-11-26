@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  flask-app:
+    image: python:3.11.10-slim
+    container_name: flask-app
+    working_dir: /bitcoin_price
+    
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+             python 'bitcoin_price.py'"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "1234:1234"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
