@@ -1,7 +1,15 @@
 from flask import Flask, render_template_string, request
 import requests
+from pymongo import MongoClient
+import os
 
 app = Flask(__name__)
+
+mongo_uri = os.getenv("MONGO_URI", "mongodb://mongo:27017/bitcoin_db")
+
+client = MongoClient(mongo_uri)
+db = client.get_database()
+bitcoin_collection = db["bitcoin"]
 
 # פונקציה לקבלת המחיר הנוכחי של ביטקוין
 def get_bitcoin_price():

@@ -1,15 +1,13 @@
 # שלב בסיסי - בחירת תמונת בסיס
-FROM python
+FROM python:3.10-slim
 
 # הגדרת ספריית העבודה בתוך הקונטיינר
-WORKDIR /bitcoin_price
+WORKDIR /app
 
-# העתקת הקבצים מהפרויקט המקומי לתוך הקונטיינר
-COPY requirements.txt requirements.txt
-COPY bitcoin_price.py bitcoin_price.py
-
-# התקנת התלויות
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 # חשיפת פורט 5000 בקונטיינר
 EXPOSE 5000

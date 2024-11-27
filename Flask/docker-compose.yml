@@ -1,30 +1,31 @@
 version: '3.8'
 
 services:
-  flask-app:
-    image: python:3.11.10-slim
-    container_name: flask-app
-    working_dir: /bitcoin_price
-    
-    volumes:
-      - .:/app
-    ports:
-      - "5000:5000"
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/mydatabase
-    command: >
-      sh -c "pip install --no-cache-dir -r requirements.txt &&
-             python 'bitcoin_price.py'"
-    depends_on:
-      - mongo
-
+  # שירות MongoDB
   mongo:
-    image: mongo:6.0
-    container_name: mongo
-    ports:
-      - "1234:1234"
+    image: mongo:latest
+    container_name: mongodb_container
     volumes:
-      - mongo_data:/data/db
+      - mongo-data:/data/db  # שמירת הנתונים ב-volume
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=bitcoin_db
+    ports:
+      - "27017:27017"  # חשיפת פורט 27017 לגישה חיצונית
+
+  # שירות האפליקציה שלך ב-Flask
+  app:
+    build: .
+    container_name: flask-app
+    command: python bitcoin_price.py
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/bitcoin_db  # URI להתחברות ל-MongoDB
+    ports:
+      - "5000:5000"  # חשיפת פורט 5000 לגישה חיצונית
+    depends_on:
+      - mongo  # האפליקציה תתחיל רק אחרי שמונגו יעלה
 
 volumes:
-  mongo_data:
+  mongo-data:
+    driver: local  # שמירת נתוני MongoDB ב-volume מקומי
