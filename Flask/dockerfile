@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 5000
 
 # הפקודה שתופעל כאשר הקונטיינר ירוץ
-CMD ["python", "bitcoin_price.py"]
+CMD ["python", "app.py"]
