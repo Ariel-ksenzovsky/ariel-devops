@@ -135,6 +135,34 @@ def bitcoin_price():
         </html>
     """, prices=prices, converted_price=converted_price, target_currency=target_currency)
 
+
+@app.route('/homeJson')
+def home_json():
+    return get_bitcoin_price()
+
+
+@app.route('/bitcoinShekel', methods=["GET", "POST"])
+def bitcoin_shekel():
+    prices = get_bitcoin_price()
+    converted_price = None
+    target_currency = None
+
+    if request.method == "POST":
+        target_currency = request.form.get("currency")
+        if target_currency == "ILS":
+            converted_price = convert_usd_to_ils(prices["USD"])
+        elif target_currency in prices:
+            converted_price = prices[target_currency]
+
+    # עיצוב המחירים להוספת פסיקים ושתי ספרות אחרי הנקודה
+    if prices:
+        for currency in prices:
+            prices[currency] = f"{prices[currency]:,.2f}"
+        if converted_price:
+            converted_price = f"{converted_price:,.2f}"
+            
+    return {'converted': converted_price, **prices}
+
 # הפעלת האפליקציה
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
