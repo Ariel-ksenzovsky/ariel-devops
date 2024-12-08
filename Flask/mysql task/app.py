@@ -1,16 +1,17 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import os
 import mysql.connector
 import random
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
 # הגדרות מסד הנתונים 
 db_config = { 
-    'host': os.getenv('MYSQL_HOST', 'localhost'),
-    'user': os.getenv('MYSQL_USER', 'root'),
-    'password': os.getenv('MYSQL_PASSWORD', 'example'),
-    'database': os.getenv('MYSQL_DB', 'testdb')
+    'host': os.getenv('MYSQL_HOST'),
+    'user': os.getenv('MYSQL_USER'),
+    'password': os.getenv('MYSQL_PASSWORD'),
+    'database': os.getenv('MYSQL_DB')
 }
 
 
@@ -29,6 +30,9 @@ def display_images(): # התחברות למסד הנתונים
     cursor.close() 
     cnx.close() 
     # העברת ה-URLs לתבנית להציג אותם 
+
+    
+    
     return render_template('index.html', images=images)
 
 if __name__ == "__main__":
