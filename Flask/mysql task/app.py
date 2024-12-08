@@ -30,9 +30,6 @@ def display_images(): # התחברות למסד הנתונים
     cursor.close() 
     cnx.close() 
     # העברת ה-URLs לתבנית להציג אותם 
-
-    
-    
     return render_template('index.html', images=images)
 
 if __name__ == "__main__":
