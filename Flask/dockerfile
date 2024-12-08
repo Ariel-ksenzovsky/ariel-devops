@@ -1,0 +1,16 @@
+# שלב בסיסי - בחירת תמונת בסיס
+FROM python:3.10-slim
+
+# הגדרת ספריית העבודה בתוך הקונטיינר
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# חשיפת פורט 5000 בקונטיינר
+EXPOSE 5000
+
+# הפקודה שתופעל כאשר הקונטיינר ירוץ
+CMD ["python", "app.py"]

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # שירות MongoDB
+  mongo:
+    image: mongo:latest
+    container_name: mongodb_container
+    volumes:
+      - mongo-data:/data/db  # שמירת הנתונים ב-volume
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=birthday_db
+    ports:
+      - "27017:27017"  # חשיפת פורט 27017 לגישה חיצונית
+
+  # שירות האפליקציה שלך ב-Flask
+  app:
+    build: .
+    container_name: flask-app
+    command: python app.py
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/birthday_db  # URI להתחברות ל-MongoDB
+    ports:
+      - "5000:5000"  # חשיפת פורט 5000 לגישה חיצונית
+    depends_on:
+      - mongo  # האפליקציה תתחיל רק אחרי שמונגו יעלה
+
+volumes:
+  mongo-data:
+    driver: local  # שמירת נתוני MongoDB ב-volume מקומי
