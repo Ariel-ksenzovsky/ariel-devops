@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <style type="text/css">
@@ -19,8 +20,12 @@
   </head>
   <body>
     <div class="container">
-      <h4>Cat Gif of the day</h4>
-      <img src="{{url}}" />
+      <h4>The Star Image of the Day</h4>
+      {% if image %}
+        <img src="{{ image }}" alt="Star Image" />
+      {% else %}
+        <p>No image found.</p>
+      {% endif %}
       <p><small>Courtesy: <a href="http://www.buzzfeed.com/copyranter/the-best-cat-gif-post-in-the-history-of-cat-gifs">Buzzfeed</a></small></p>
     </div>
   </body>

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS images (
 -- Insert some sample cat GIF URLs into the 'images' table
 INSERT INTO images (url) VALUES
 ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWhVVkX-ECkWuITbkKbOBzEayBLLXwLgqCZQ&s"),
-("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH8RnFlf6AbwIUCD9p03vWkrIXpQn1Hpc8Pw&s");
-("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTunuv7Ntr7YxZKE8_mZFgV2-lsVnJZ4-Cb8g&s");
-("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiElvS_DJZ5uxm9OqkhsefGEpEVi5cHoelaA&s");
+("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH8RnFlf6AbwIUCD9p03vWkrIXpQn1Hpc8Pw&s"),
+("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTunuv7Ntr7YxZKE8_mZFgV2-lsVnJZ4-Cb8g&s"),
+("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiElvS_DJZ5uxm9OqkhsefGEpEVi5cHoelaA&s"),
 ("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfcjZ3c6XBJsZsAuQgogcuQAJmBvLIICxm-Q&s");
