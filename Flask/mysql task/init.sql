@@ -4,6 +4,14 @@ CREATE DATABASE IF NOT EXISTS stargifs;
 -- Use the created database
 USE stargifs;
 
+CREATE TABLE IF NOT EXISTS visitor_counter (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    count INT NOT NULL DEFAULT 0
+);
+
+-- Initialize the counter with a value
+INSERT INTO visitor_counter (count) VALUES (0);
+
 -- Create the 'images' table if it doesn't exist
 CREATE TABLE IF NOT EXISTS images (
     id INT AUTO_INCREMENT PRIMARY KEY,
