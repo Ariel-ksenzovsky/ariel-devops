@@ -3,8 +3,9 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+    image: arielk2511/star_meme_sql_compose
+      #context: .
+      #dockerfile: Dockerfile
     container_name: docker-gif-app
     ports:
       - "${FLASK_PORT}:${FLASK_PORT}"
