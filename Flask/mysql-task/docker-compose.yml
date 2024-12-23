@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     image: arielk2511/star_meme_sql_compose:2.0
