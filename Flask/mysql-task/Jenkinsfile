@@ -70,7 +70,7 @@ pipeline {
                 sh '''
                 if ! curl -f http://localhost:5000; then
                     echo "App is not reachable."
-                    docker logs flask_app_container
+                    docker logs docker-gif-app
                     exit 1
                 fi
                 '''
