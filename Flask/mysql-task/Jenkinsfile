@@ -61,7 +61,7 @@ pipeline {
                 sh 'sleep 5'
                 // Check logs for errors
                 sh '''
-                if ! docker logs flask_app_container; then
+                if ! docker logs docker-gif-app; then
                     echo "Container logs check failed"
                     exit 1
                 fi
