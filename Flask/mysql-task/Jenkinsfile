@@ -21,6 +21,8 @@ pipeline {
                 sh '''
                 rm -rf ariel-devops
                 git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git
+                pwd
+                id
                 cd ariel-devops/Flask/mysql-task
                 docker-compose build
                 '''
