@@ -34,6 +34,7 @@ pipeline {
         stage('Prepare SQL File') {
             steps {
                 sh '''
+                cd ~
                 # Copy init.sql to /tmp (ensure permissions)
                 cp ariel-devops/Flask/mysql-task/init.sql ${SQL_FILE_PATH}
                 '''
@@ -43,6 +44,7 @@ pipeline {
         stage('Run') {
             steps {
                 sh '''
+                cd ~
                 docker ps -a  # List containers to check if there's a conflict
                 id
                 cd ariel-devops/Flask/mysql-task
