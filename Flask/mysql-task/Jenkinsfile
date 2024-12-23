@@ -2,73 +2,59 @@ pipeline {
     agent any
 
     triggers {
-        pollSCM('* * * * *') // Poll SCM every minute
+        pollSCM('* * * * *')  // Poll SCM every minute
     }
 
     stages {
         stage('Cleanup') {
             steps {
-                script {
-                    def containerName = 'flask_app_container'
-                    sh """
-                    if [ \$(docker ps -a -q -f name=\${containerName}) ]; then
-                        docker stop \${containerName} || true
-                        docker rm \${containerName} || true
-                    fi
-                    """
-                }
+                sh '''
+                docker stop flask_app_container || echo "Container not running"
+                docker rm flask_app_container || echo "Container already removed"
+                '''
             }
         }
-
         stage('Build') {
             steps {
-                sh 'rm -rf ariel-devops'
+                sh 'rm -rf devops-1144-git'
                 sh 'git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git'
-                sh 'cd ariel-devops/Flask/mysql-task && docker build -t flask_app:1.0 .'
+                sh 'cd devops-1144-git/Flask/mysql-task && docker build -t arielk2511/flask_app:1.0 .'
             }
         }
-
         stage('Run') {
             steps {
-                script {
-                    def containerName = 'flask_app_container'
-                    sh """
-                    docker ps -a -q -f name=\${containerName} | xargs --no-run-if-empty docker rm -f
-                    docker run -d -p 5000:5000 --name \${containerName} flask_app:1.0
-                    """
-                }
+                sh '''
+                docker ps -a  # List containers to check if there's a conflict
+                docker run --rm -d -p 5000:5000 --name flask_app_container arielk2511/flask_app:1.0
+                docker ps  # Verify if the container is running
+                '''
             }
         }
-
         stage('Test') {
             steps {
                 // Wait for the container to start
                 sh 'sleep 5'
                 // Check logs for errors
-                script {
-                    def containerName = 'flask_app_container'
-                    sh """
-                    if ! docker logs \${containerName} > /dev/null 2>&1; then
-                        echo "Container logs check failed"
-                        exit 1
-                    fi
-                    """
-                }
+                sh '''
+                if ! docker logs flask_app_container; then
+                    echo "Container logs check failed"
+                    exit 1
+                fi
+                '''
                 // Test the app
-                sh """
+                sh '''
                 if ! curl -f http://localhost:5000; then
                     echo "App is not reachable."
                     docker logs flask_app_container
                     exit 1
                 fi
-                """
+                '''
             }
         }
-
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
             }
-        }
-    }
+        }
+    }
 }
