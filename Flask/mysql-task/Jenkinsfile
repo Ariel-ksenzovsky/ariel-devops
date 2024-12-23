@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('* * * * *')  // Poll SCM every minute
+    }
+
+    stages {
+        stage('Cleanup') {
+            steps {
+                sh '''
+                docker stop flask_app_container || echo "Container not running"
+                docker rm flask_app_container || echo "Container already removed"
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'rm -rf ariel-devops'
+                sh 'git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git'
+                sh 'cd ariel-devops/Flask/mysql-task && docker build -t flask_app:1.0 .'
+            }
+        }
+        stage('Run') {
+            steps {
+                sh '''
+                docker ps -a  # List containers to check if there's a conflict
+                docker run --rm -d -p 5000:5000 --name flask_app_container flask_app:1.0
+                docker ps  # Verify if the container is running
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                // Wait for the container to start
+                sh 'sleep 5'
+                // Check logs for errors
+                sh '''
+                if ! docker logs flask_app_container; then
+                    echo "Container logs check failed"
+                    exit 1
+                fi
+                '''
+                // Test the app
+                sh '''
+                if ! curl -f http://localhost:5000; then
+                    echo "App is not reachable."
+                    docker logs flask_app_container
+                    exit 1
+                fi
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+            }
+        }
+    }
+}
