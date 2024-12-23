@@ -5,15 +5,20 @@ pipeline {
         pollSCM('* * * * *')  // Poll SCM every minute
     }
 
-    stages {
-        stage('Cleanup') {
-            steps {
-                sh '''
-                docker stop flask_app_container || echo "Container not running"
-                docker rm flask_app_container || echo "Container already removed"
-                '''
+    stage('Cleanup') {
+        steps {
+            script {
+                def containerName = 'flask_app_container'
+                sh """
+                if [ \$(docker ps -a -q -f name=\${containerName}) ]; then
+                docker stop \${containerName} || true
+                docker rm \${containerName} || true
+                fi
+                """
             }
         }
+    }
+
         stage('Build') {
             steps {
                 sh 'rm -rf ariel-devops'
@@ -22,14 +27,17 @@ pipeline {
             }
         }
         stage('Run') {
-            steps {
-                sh '''
-                docker ps -a  # List containers to check if there's a conflict
-                docker run --rm -d -p 5000:5000 --name flask_app_container flask_app:1.0
-                docker ps  # Verify if the container is running
-                '''
+        steps {
+            script {
+                def containerName = 'flask_app_container'
+                sh """
+                docker ps -a -q -f name=\${containerName} | xargs --no-run-if-empty docker rm -f
+                docker run --rm -d -p 5000:5000 --name \${containerName} flask_app:1.0
+                """
             }
         }
+    }
+ }
         stage('Test') {
             steps {
                 // Wait for the container to start
