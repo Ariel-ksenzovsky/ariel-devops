@@ -68,7 +68,7 @@ pipeline {
                 '''
                 // Test the app
                 sh '''
-                if ! curl -f http://localhost:5000; then
+                if ! curl -f -L -o http://localhost:5000; then
                     echo "App is not reachable."
                     docker logs docker-gif-app
                     exit 1
