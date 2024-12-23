@@ -1,35 +1,52 @@
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('* * * * *')  // Poll SCM every minute
+    environment {
+        // Define environment variables for paths
+        SQL_FILE_PATH = '/tmp/init.sql'  // Set a path with appropriate permissions
     }
 
     stages {
         stage('Cleanup') {
             steps {
                 sh '''
-                docker stop flask_app_container || echo "Container not running"
-                docker rm flask_app_container || echo "Container already removed"
+                    docker stop docker-gif-app || echo "Container not running"
+                    docker rm docker-gif-app || echo "Container already removed"
                 '''
             }
         }
+
         stage('Build') {
             steps {
-                sh 'rm -rf devops-1144-git'
-                sh 'git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git'
-                sh 'cd devops-1144-git/Flask/mysql-task && docker build -t arielk2511/flask_app:1.0 .'
+                sh '''
+                rm -rf ariel-devops
+                git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git
+                cd ariel-devops/Flask/mysql-task
+                docker-compose build
+                '''
             }
         }
+
+        stage('Prepare SQL File') {
+            steps {
+                sh '''
+                # Copy init.sql to /tmp (ensure permissions)
+                cp ariel-devops/Flask/mysql-task/init.sql ${SQL_FILE_PATH}
+                '''
+            }
+        }
+
         stage('Run') {
             steps {
                 sh '''
                 docker ps -a  # List containers to check if there's a conflict
-                docker run --rm -d -p 5000:5000 --name flask_app_container arielk2511/flask_app:1.0
+                cd ariel-devops/Flask/mysql-task
+                sudo docker-compose up -d
                 docker ps  # Verify if the container is running
                 '''
             }
         }
+
         stage('Test') {
             steps {
                 // Wait for the container to start
@@ -51,10 +68,18 @@ pipeline {
                 '''
             }
         }
+
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
             }
-        }
-    }
+        }
+    }
+
+    post {
+        always {
+            // Clean up by removing the copied SQL file after execution
+            sh "rm -f ${SQL_FILE_PATH}"
+        }
+    }
 }
