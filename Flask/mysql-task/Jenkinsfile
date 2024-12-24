@@ -94,6 +94,8 @@ pipeline {
             // Clean up by removing the copied SQL file after execution
             sh '''
             rm -f ${SQL_FILE_PATH}
+            cd ariel-devops/Flask/mysql-task
+            pwd
             docker compose down -v
             '''
         }
