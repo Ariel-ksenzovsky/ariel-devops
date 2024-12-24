@@ -97,7 +97,6 @@ pipeline {
             rm -f ${SQL_FILE_PATH}
             cd ariel-devops/Flask/mysql-task
             pwd
-            docker compose down -v
             '''
         }
     }
