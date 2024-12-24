@@ -67,12 +67,11 @@ pipeline {
                 '''
                 // Test the app
                 sh '''
-                 if curl -f http://localhost:5000; then
-                    echo "App is reachable."
-                    break  # Exit the loop on the first success
+                if ! curl -f http://localhost:5000; then
+                    echo "App is not reachable."
+                    docker logs docker-gif-app
+                    exit 1
                 fi
-                docker logs docker-gif-app
-                exit 1
                 '''
             }
         }
