@@ -12,7 +12,6 @@ pipeline {
                 sh '''
                 docker stop docker-gif-app || echo "Container not running"
                 docker rm docker-gif-app || echo "Container already removed"
-                docker-compose down -v
                 '''
             }
         }
