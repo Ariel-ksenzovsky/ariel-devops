@@ -24,7 +24,7 @@ pipeline {
                 id
                 git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git
                 pwd
-                docker-compose build
+                docker compose build
                 '''
             }
         }
@@ -44,7 +44,7 @@ pipeline {
                 docker ps -a  # List containers to check if there's a conflict
                 id
                 sudo chmod -R 775 /var/lib/jenkins
-                sudo docker-compose up -d
+                sudo docker compose up -d
                 docker ps  # Verify if the container is running
                 '''
             }
