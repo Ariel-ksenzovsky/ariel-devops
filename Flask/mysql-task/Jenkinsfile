@@ -26,6 +26,7 @@ pipeline {
                 pwd
                 cd ariel-devops/Flask/mysql-task
                 pwd
+                cp /home/arielk/.env /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task
                 docker compose build
                 '''
             }
