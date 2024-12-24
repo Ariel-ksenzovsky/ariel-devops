@@ -45,6 +45,7 @@ pipeline {
                 sh '''
                 docker ps -a  # List containers to check if there's a conflict
                 id
+                pwd
                 docker compose up -d
                 docker ps  # Verify if the container is running
                 '''
