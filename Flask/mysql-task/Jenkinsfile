@@ -67,7 +67,10 @@ pipeline {
                 '''
                 // Test the app
                 sh '''
-                curl http://localhost:5000
+                 if curl -f http://localhost:5000; then
+                    echo "App is reachable."
+                    break  # Exit the loop on the first success
+                fi
                 docker logs docker-gif-app
                 exit 1
                 '''
@@ -77,6 +80,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
+                sh '''
+                pwd
+                cd ariel-devops/Flask/mysql-task
+                pwd
+                docker compose up -d
+                '''
             }
         }
     }
