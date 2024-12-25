@@ -14,7 +14,7 @@ pipeline {
                 docker rm docker-gif-app || echo "Container already removed"
                 cd ariel-devops/Flask/mysql-task
                 pwd
-                docker compose down -v
+                docker compose down || true
                 '''
             }
         }
