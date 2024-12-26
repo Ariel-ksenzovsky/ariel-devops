@@ -19,6 +19,8 @@ pipeline {
                 cd ariel-devops/Flask/mysql-task
                 pwd
                 docker compose down || true
+                docker rmi $(docker images -q) -f
+
                 '''
             }
         }
