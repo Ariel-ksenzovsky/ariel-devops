@@ -6,6 +6,10 @@ pipeline {
         SQL_FILE_PATH = '/tmp/init.sql'  // Set a path with appropriate permissions
     }
 
+    triggers {
+        pollSCM('* * * * *')  // poll SCM every minute
+    }
+
     stages {
         stage('Cleanup') {
             steps {
