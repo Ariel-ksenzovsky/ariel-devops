@@ -17,6 +17,8 @@ pipeline {
                 sh '''
                 docker stop docker-gif-app || echo "Container not running"
                 docker rm docker-gif-app || echo "Container already removed"
+                rm -rf ariel-devops || true
+                git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git
                 cd ariel-devops/Flask/mysql-task
                 pwd
                 docker compose down || true
@@ -29,11 +31,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                rm -rf ariel-devops
                 pwd
                 id
-                git clone https://github.com/Ariel-ksenzovsky/ariel-devops.git
-                pwd
                 cd ariel-devops/Flask/mysql-task
                 pwd
                 cp /home/arielk/.env /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task
