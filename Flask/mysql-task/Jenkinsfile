@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables for paths
         SQL_FILE_PATH = '/tmp/init.sql'  // Set a path with appropriate permissions
-        MYSQL_ROOT_PASSWORD = credentials('mysql_root')
+        DB_PASSWORD = credentials('mysql_root')
     }
 
     triggers {
