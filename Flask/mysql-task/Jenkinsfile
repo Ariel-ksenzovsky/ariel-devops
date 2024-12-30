@@ -109,10 +109,12 @@ pipeline {
 
         stage('Test-aws') {
             steps {
-                sh '''
-                pwd
-                aws --version
-                '''
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWS_CREDENTIALS]]) {
+                    sh '''
+                    pwd
+                    aws --version
+                    '''
+                }
             }
         }
 
