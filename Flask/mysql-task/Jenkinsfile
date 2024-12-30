@@ -106,6 +106,15 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps {
+                sh '''
+                pwd
+                aws --version
+                '''
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
