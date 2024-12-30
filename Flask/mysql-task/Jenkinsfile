@@ -7,6 +7,7 @@ pipeline {
         DOCKER_TOKEN_ID = 'docker-hub-token'
         DOCKER_IMAGE = 'arielk2511/star_meme_sql_compose'
         BUILD_NUM = "${BUILD_NUMBER}"
+        AWS_CREDENTIALS = 'aws-creds'
     }
 
     triggers {
