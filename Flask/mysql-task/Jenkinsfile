@@ -57,6 +57,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    cd ariel-devops/Flask/mysql-task
                     docker build -t arielk2511/star_meme_sql_compose:latest .
                     docker build -t arielk2511/star_meme_sql_compose:2.0.${build_num} .
                     docker push arielk2511/star_meme_sql_compose:latest
