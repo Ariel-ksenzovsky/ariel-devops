@@ -89,7 +89,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test-web') {
             steps {
                 sh 'sleep 30'
                 sh '''
@@ -106,7 +106,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Test-aws') {
             steps {
                 sh '''
                 pwd
