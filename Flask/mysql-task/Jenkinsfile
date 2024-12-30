@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables for paths
-        SQL_FILE_PATH = '/tmp/init.sql'  // Set a path with appropriate permissions
+        SQL_FILE_PATH = '/tmp/init.sql'
         DB_PASSWORD = credentials('mysql_root')
-        DOCKER_TOKEN_ID = 'docker-hub-token' // Replace with your secret text ID
+        DOCKER_TOKEN_ID = 'docker-hub-token'
         DOCKER_IMAGE = 'arielk2511/star_meme_sql_compose'
         BUILD_NUM = "${BUILD_NUMBER}"
     }
@@ -30,7 +29,7 @@ pipeline {
             }
         }
 
-        stage('set the environment variables') {
+        stage('Set the Environment Variables') {
             steps {
                 sh '''
                 pwd
@@ -45,7 +44,6 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    // Use secret text to log in
                     withCredentials([string(credentialsId: env.DOCKER_TOKEN_ID, variable: 'DOCKER_TOKEN')]) {
                         sh """
                         echo "$DOCKER_TOKEN" | docker login -u arielk2511 --password-stdin
@@ -54,6 +52,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build and Push Docker Image') {
             steps {
                 script {
@@ -64,7 +63,6 @@ pipeline {
                     docker push ${DOCKER_IMAGE}:latest
                     docker push ${DOCKER_IMAGE}:2.0.${BUILD_NUM}
                     '''
-                    }
                 }
             }
         }
@@ -72,7 +70,6 @@ pipeline {
         stage('Prepare SQL File') {
             steps {
                 sh '''
-                # Copy init.sql to /tmp (ensure permissions)
                 cp ariel-devops/Flask/mysql-task/init.sql ${SQL_FILE_PATH}
                 '''
             }
@@ -81,30 +78,25 @@ pipeline {
         stage('Run') {
             steps {
                 sh '''
-                docker ps -a  # List containers to check if there's a conflict
+                docker ps -a
                 id
                 pwd
                 cd ariel-devops/Flask/mysql-task
                 pwd
                 docker compose up -d
-                docker ps  # Verify if the container is running
+                docker ps
                 '''
             }
         }
 
         stage('Test') {
             steps {
-                // Wait for the container to start
                 sh 'sleep 30'
-                // Check logs for errors
                 sh '''
                 if ! docker logs docker-gif-app; then
                     echo "Container logs check failed"
                     exit 1
                 fi
-                '''
-                // Test the app
-                sh '''
                 if ! curl -f http://localhost:5000; then
                     echo "App is not reachable."
                     docker logs docker-gif-app
@@ -129,9 +121,9 @@ pipeline {
 
     post {
         always {
-            // Clean up by removing the copied SQL file after execution
             sh '''
             rm -f ${SQL_FILE_PATH}
             '''
         }
     }
+}
