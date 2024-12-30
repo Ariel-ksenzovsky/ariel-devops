@@ -58,12 +58,11 @@ pipeline {
                 script {
                     sh '''
                     cd ariel-devops/Flask/mysql-task
+                    docker build -t ${DOCKER_IMAGE}:latest .
+                    docker build -t ${DOCKER_IMAGE}:2.0.${BUILD_NUM} .
+                    docker push ${DOCKER_IMAGE}:latest
+                    docker push ${DOCKER_IMAGE}:2.0.${BUILD_NUM}
                     '''
-                    dockerImage = docker.build("${DOCKER_IMAGE}:latest", "--no-cache .")
-                    dockerImage.tag("1.0.${env.BUILD_NUMBER}")
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-token') {
-                        dockerImage.push("latest")
-                        dockerImage.push("1.0.${env.BUILD_NUMBER}")`
                     }
                 }
             }
