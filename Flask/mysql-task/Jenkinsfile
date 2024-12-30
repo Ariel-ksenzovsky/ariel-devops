@@ -5,6 +5,8 @@ pipeline {
         // Define environment variables for paths
         SQL_FILE_PATH = '/tmp/init.sql'  // Set a path with appropriate permissions
         DB_PASSWORD = credentials('mysql_root')
+        DOCKER_TOKEN_ID = 'docker-hub-token' // Replace with your secret text ID
+        build_num = "${BUILD_NUMBER}"
     }
 
     triggers {
@@ -23,7 +25,6 @@ pipeline {
                 pwd
                 docker compose down || true
                 docker rmi $(docker images -q) -f || true
-
                 '''
             }
         }
@@ -36,8 +37,32 @@ pipeline {
                 cd ariel-devops/Flask/mysql-task
                 pwd
                 cp /home/arielk/.env /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task
-                docker compose build
+                docker build -t arielk2511/star_meme_sql_compose:latest .
+                docker build -t arielk2511/star_meme_sql_compose:2.0.${build_num} .
                 '''
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                script {
+                    // Use secret text to log in
+                    withCredentials([string(credentialsId: env.DOCKER_TOKEN_ID, variable: 'DOCKER_TOKEN')]) {
+                        sh """
+                        echo "$DOCKER_TOKEN" | docker login -u arielk2511 --password-stdin
+                        """
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    sh '''
+                    docker push arielk2511/star_meme_sql_compose:latest
+                    docker push arielk2511/star_meme_sql_compose:2.0.${build_num}
+                    '''
+                }
             }
         }
 
