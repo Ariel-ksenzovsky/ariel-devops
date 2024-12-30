@@ -64,6 +64,7 @@ pipeline {
                     docker push ${DOCKER_IMAGE}:latest
                     docker push ${DOCKER_IMAGE}:2.0.${BUILD_NUM}
                     '''
+                    }
                 }
             }
         }
