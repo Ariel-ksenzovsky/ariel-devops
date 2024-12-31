@@ -202,6 +202,7 @@ pipeline {
             sh '''
             rm -f ${SQL_FILE_PATH}
             '''
+            }
         }
     }
 }
