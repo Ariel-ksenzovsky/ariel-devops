@@ -8,6 +8,12 @@ pipeline {
         DOCKER_IMAGE = 'arielk2511/star_meme_sql_compose'
         BUILD_NUM = "${BUILD_NUMBER}"
         AWS_CREDENTIALS = 'aws-creds'
+        AWS_REGION = 'us-east-1'         // Replace with your AWS region
+        AMI_ID = 'ami-01816d07b1128cd2d' // Replace with your AMI ID
+        INSTANCE_TYPE = 't2.micro'      // Replace with your desired instance type
+        KEY_NAME = 'EC2-Key-Pair'      // Replace with your EC2 key pair name
+        SECURITY_GROUP = 'sg-0fa5d6a6aacb737bf' // Replace with your security group ID
+        SUBNET_ID = 'subnet-0c2a59c789cb028f1' // Replace with your Subnet ID
     }
 
     triggers {
@@ -107,29 +113,89 @@ pipeline {
             }
         }
 
-        stage('Test-aws') {
+        stage('Launch EC2 Instance') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWS_CREDENTIALS]]) {
-                    sh '''
-                    pwd
-                    aws s3 ls
+                script {
+                    // Create User Data script to install Docker and Docker Compose
+                    def userData = '''#!/bin/bash
+                        # Update the package repository and install Docker
+                        sudo yum update -y
+                        sudo yum install -y docker
+                        sudo systemctl start docker
+                        sudo systemctl enable docker
+
+                        # Install Docker Compose
+                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                        sudo chmod +x /usr/local/bin/docker-compose
+
+                        # Add ec2-user to the docker group to run docker without sudo
+                        sudo usermod -a -G docker ec2-user
                     '''
+
+                    // Run the AWS CLI command to launch an EC2 instance with the User Data script
+                    def launchCommand = """
+                        aws ec2 run-instances \
+                            --image-id ${env.AMI_ID} \
+                            --instance-type ${env.INSTANCE_TYPE} \
+                            --key-name ${env.KEY_NAME} \
+                            --security-groups ${env.SECURITY_GROUP} \
+                            --subnet-id ${env.SUBNET_ID} \
+                            --associate-public-ip-address \
+                            --min-count 1 \
+                            --max-count 1 \
+                            --region ${env.AWS_REGION} \
+                            --user-data "${userData}"
+                    """
+                    def result = sh(script: launchCommand, returnStdout: true).trim()
+                    echo "Launched EC2 instance with response: ${result}"
+
+                    // Extract the instance ID from the response
+                    def instanceId = sh(script: "echo ${result} | jq -r '.Instances[0].InstanceId'", returnStdout: true).trim()
+                    echo "Launched EC2 instance with ID: ${instanceId}"
+
+                    // Get the public IP of the instance
+                    def publicIp = sh(script: "aws ec2 describe-instances --instance-id ${instanceId} --query 'Reservations[0].Instances[0].PublicIpAddress' --output text --region ${env.AWS_REGION}", returnStdout: true).trim()
+                    echo "Instance Public IP: ${publicIp}"
+
+                    // Wait for the instance to be ready (optional, for a more robust solution)
+                    sh "sleep 30"
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Copy Files to EC2 Instance') {
             steps {
-                echo 'Deploying...'
-                sh '''
-                pwd
-                cd ariel-devops/Flask/mysql-task
-                pwd
-                docker compose up -d
-                '''
+                script {
+                    // Use SCP to copy multiple files to the EC2 instance
+                    def scpCommand = """
+                        scp -o StrictHostKeyChecking=no -i ${env.KEY_PATH} \
+                            /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task.docker-compose.yml \
+                            /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
+                            /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
+                            ec2-user@${publicIp}:/home/ec2-user/
+                    """
+                    sh(script: scpCommand)
+                    echo "Files copied to EC2 instance."
+                }
             }
         }
-    }
+
+        stage('Run Docker Container "deploy"') {
+            steps {
+                script {
+                    // Run Docker container on the EC2 instance
+                    def containerCommand = """
+                        ssh -o StrictHostKeyChecking=no -i ${env.KEY_PATH} ec2-user@${publicIp} << 'EOF'
+                            # Run a sample Docker container compose
+                            docker compose up
+                        EOF
+                    """
+                    sh(script: containerCommand)
+                    echo "Docker container is running on EC2 instance."
+                }
+            }
+        }
+
 
     post {
         always {
