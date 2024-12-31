@@ -13,7 +13,6 @@ pipeline {
         INSTANCE_TYPE = 't2.micro'      // Replace with your desired instance type
         KEY_NAME = 'EC2-Key-Pair'      // Replace with your EC2 key pair name
         SECURITY_GROUP = 'sg-0fa5d6a6aacb737bf' // Replace with your security group ID
-        SUBNET_ID = 'subnet-0c2a59c789cb028f1' // Replace with your Subnet ID
     }
 
     triggers {
@@ -139,7 +138,6 @@ pipeline {
                             --instance-type ${env.INSTANCE_TYPE} \
                             --key-name ${env.KEY_NAME} \
                             --security-groups ${env.SECURITY_GROUP} \
-                            --subnet-id ${env.SUBNET_ID} \
                             --associate-public-ip-address \
                             --region ${env.AWS_REGION} \
                             --user-data "${userData}"
