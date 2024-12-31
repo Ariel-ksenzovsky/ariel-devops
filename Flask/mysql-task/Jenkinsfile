@@ -141,8 +141,6 @@ pipeline {
                             --security-groups ${env.SECURITY_GROUP} \
                             --subnet-id ${env.SUBNET_ID} \
                             --associate-public-ip-address \
-                            --min-count 1 \
-                            --max-count 1 \
                             --region ${env.AWS_REGION} \
                             --user-data "${userData}"
                     """
