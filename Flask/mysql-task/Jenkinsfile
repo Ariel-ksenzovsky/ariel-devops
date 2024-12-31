@@ -12,7 +12,7 @@ pipeline {
         AMI_ID = 'ami-01816d07b1128cd2d' // Replace with your AMI ID
         INSTANCE_TYPE = 't2.micro'      // Replace with your desired instance type
         KEY_NAME = 'EC2-Key-Pair'      // Replace with your EC2 key pair name
-        SECURITY_GROUP = 'sg-0fa5d6a6aacb737bf' // Replace with your security group ID
+        // SECURITY_GROUP = 'sg-0fa5d6a6aacb737bf' // Replace with your security group ID
     }
 
     triggers {
@@ -131,13 +131,12 @@ pipeline {
                         sudo usermod -a -G docker ec2-user
                     '''
 
-                    // Run the AWS CLI command to launch an EC2 instance with the User Data script
+                    // Run the AWS CLI command to launch an EC2 instance with the User Data script,                                --security-groups ${env.SECURITY_GROUP} \
                     def launchCommand = """
                         aws ec2 run-instances \
                             --image-id ${env.AMI_ID} \
                             --instance-type ${env.INSTANCE_TYPE} \
                             --key-name ${env.KEY_NAME} \
-                            --security-groups ${env.SECURITY_GROUP} \
                             --associate-public-ip-address \
                             --region ${env.AWS_REGION} \
                             --user-data "${userData}"
