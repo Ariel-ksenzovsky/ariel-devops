@@ -112,7 +112,7 @@ pipeline {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWS_CREDENTIALS]]) {
                     sh '''
                     pwd
-                    aws --version
+                    aws s3 ls
                     '''
                 }
             }
