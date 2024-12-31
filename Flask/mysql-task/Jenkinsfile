@@ -173,6 +173,8 @@ pipeline {
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
                             ec2-user@${publicIp}:/home/ec2-user/
+
+                            echo "DB_PASSWORD"=\${mysql_root} >> /home/ec2-user/.env
                     """
                     sh(script: scpCommand)
                     echo "Files copied to EC2 instance."
@@ -195,14 +197,12 @@ pipeline {
                 }
             }
         }
-
-
+    }
     post {
         always {
             sh '''
             rm -f ${SQL_FILE_PATH}
             '''
-            }
         }
     }
 }
