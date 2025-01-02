@@ -141,20 +141,26 @@ pipeline {
                             --region ${env.AWS_REGION} \
                             --user-data "${userData}" \
                             --output json
+                            sleep 30
                     """
+
                     def result = sh(script: launchCommand, returnStdout: true).trim()
-                    echo "Launched EC2 instance with response: ${result}"
-
-                    // Extract the instance ID from the response
-                    def instanceId = sh(script: "echo ${result} | jq -r '.Instances[0].InstanceId'", returnStdout: true).trim()
-                    echo "Launched EC2 instance with ID: ${instanceId}"
-
-                    // Get the public IP of the instance
-                    def publicIp = sh(script: "aws ec2 describe-instances --instance-id ${instanceId} --query 'Reservations[0].Instances[0].PublicIpAddress' --output text --region ${env.AWS_REGION}", returnStdout: true).trim()
+                    echo "EC2 Launch Command Result: ${result}"
+            
+                    // Extract InstanceId and ReservationId
+                    def instanceId = sh(script: "echo '${result}' | jq -r '.Instances[0].InstanceId'", returnStdout: true).trim()
+                    def reservationId = sh(script: "echo '${result}' | jq -r '.ReservationId'", returnStdout: true).trim()
+                    echo "Launched EC2 Instance ID: ${instanceId}, Reservation ID: ${reservationId}"
+            
+                    // Optional: Retrieve Public IP
+                    def publicIp = sh(script: """
+                        aws ec2 describe-instances \
+                        --instance-id ${instanceId} \
+                        --query 'Reservations[0].Instances[0].PublicIpAddress' \
+                        --output text \
+                        --region ${env.AWS_REGION}
+                    """, returnStdout: true).trim()
                     echo "Instance Public IP: ${publicIp}"
-
-                    // Wait for the instance to be ready (optional, for a more robust solution)
-                    sh "sleep 30"
                 }
             }
         }
