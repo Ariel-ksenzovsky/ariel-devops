@@ -168,11 +168,13 @@ pipeline {
         stage('Copy Files to EC2 Instance') {
             steps {
                 script {
-                    sh "sleep 30"
+                    sh 'sleep 30'
 
+                    sh '''
                     // Debug variables
                     echo "Public IP: ${publicIp}"
                     echo "Key Path: ${env.KEY_NAME}"
+                    '''
 
                     // Use SCP to copy multiple files to the EC2 instance
                     def scpCommand = """
