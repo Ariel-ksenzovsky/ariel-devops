@@ -139,7 +139,8 @@ pipeline {
                             --key-name ${env.KEY_NAME} \
                             --associate-public-ip-address \
                             --region ${env.AWS_REGION} \
-                            --user-data "${userData}"
+                            --user-data ${userData} \
+                            --output json
                     """
                     def result = sh(script: launchCommand, returnStdout: true).trim()
                     echo "Launched EC2 instance with response: ${result}"
