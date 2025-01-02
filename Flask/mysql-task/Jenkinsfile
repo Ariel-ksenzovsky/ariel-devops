@@ -169,6 +169,11 @@ pipeline {
             steps {
                 script {
                     sh "sleep 30"
+
+                    // Debug variables
+                    echo "Public IP: ${publicIp}"
+                    echo "Key Path: ${env.KEY_NAME}"
+
                     // Use SCP to copy multiple files to the EC2 instance
                     def scpCommand = """
                         scp -o StrictHostKeyChecking=no -i ${env.KEY_NAME} \
