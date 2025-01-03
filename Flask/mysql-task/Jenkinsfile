@@ -193,10 +193,10 @@ pipeline {
                             'echo "DB_PASSWORD=\${mysql_root}" >> /home/ec2-user/.env'
                         """
                         echo "DB_PASSWORD added to .env on EC2 instance."
+                    }
                 }
             }
         }
-    }
         
         stage('Run Docker Container "deploy"') {
             steps {
@@ -215,8 +215,8 @@ pipeline {
                 }
             }
         }
+    }
 
-        
     post {
         always {
             sh '''
