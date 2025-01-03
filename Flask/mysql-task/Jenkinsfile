@@ -161,14 +161,14 @@ pipeline {
                         --region ${env.AWS_REGION}
                     """, returnStdout: true).trim()
                     echo "Instance Public IP: ${publicIp}"
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
 
-        stage('Copy Files to EC2 Instance') {
-            steps {
-                script {
-                    sh 'sleep 30'
+        // stage('Copy Files to EC2 Instance') {
+        //     steps {
+        //         script {
+        //             sh 'sleep 30'
 
 
                     // Debug variables
