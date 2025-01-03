@@ -172,11 +172,11 @@ pipeline {
 
                     // Debug variables
                     echo "Public IP: ${publicIp}"
-                    echo "Key Path: ${env.KEY_NAME}"
+                    echo "Key Path: ${KEY_NAME}"
 
                     // Use SCP to copy multiple files to the EC2 instance
                     def scpCommand = """
-                        scp -o StrictHostKeyChecking=no \
+                        scp -i ${KEY_NAME} -o StrictHostKeyChecking=no \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task.docker-compose.yml \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
