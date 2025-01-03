@@ -141,6 +141,7 @@ pipeline {
                             --region ${env.AWS_REGION} \
                             --security-groups ${env.SECURITY_GROUP} \
                             --user-data "${userData}" \
+                            --subnet-id subnet-059add4bb40e62a20 \
                             --output json
                             sleep 30
                     """
