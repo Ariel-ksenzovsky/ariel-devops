@@ -172,10 +172,8 @@ pipeline {
 
 
                     // Debug variables
-                    sh '''
                     echo "Public IP: ${publicIp}"
                     echo "Key Path: ${env.KEY_NAME}"
-                    '''
 
                     // Use SCP to copy multiple files to the EC2 instance
                     def scpCommand = """
