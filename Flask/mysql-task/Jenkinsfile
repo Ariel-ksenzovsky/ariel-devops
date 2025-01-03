@@ -136,7 +136,6 @@ pipeline {
                             --image-id ${env.AMI_ID} \
                             --instance-type ${env.INSTANCE_TYPE} \
                             --key-name ${env.KEY_NAME} \
-                            --associate-public-ip-address \
                             --region ${env.AWS_REGION} \
                             --network-interfaces '[{"NetworkInterfaceId":"eni-010d0c6160079f615","DeviceIndex":0}]' \
                             --user-data "${userData}" \
