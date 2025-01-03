@@ -122,10 +122,10 @@ pipeline {
                         sudo systemctl start docker
                         sudo systemctl enable docker
 
-                        COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name')
+                        COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r '.tag_name')
 
                         # Install docker-compose
-                        sh -c "curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
+                        curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose"
                         chmod +x /usr/local/bin/docker-compose
 
                         # Add ec2-user to the docker group to run docker without sudo
