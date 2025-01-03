@@ -12,7 +12,6 @@ pipeline {
         AMI_ID = 'ami-01816d07b1128cd2d' // Replace with your AMI ID
         INSTANCE_TYPE = 't2.micro'      // Replace with your desired instance type
         KEY_NAME = 'instance-test'      // Replace with your EC2 key pair name
-        NETWORK_INTERFACE = 'eni-010d0c6160079f615' // Replace with your security group ID
     }
 
     triggers {
@@ -139,7 +138,7 @@ pipeline {
                             --key-name ${env.KEY_NAME} \
                             --associate-public-ip-address \
                             --region ${env.AWS_REGION} \
-                            --network-interface-id ${env.NETWORK_INTERFACE} \
+                            --network-interfaces '[{"NetworkInterfaceId":"eni-010d0c6160079f615","DeviceIndex":0}]' \
                             --user-data "${userData}" \
                             --output json
                             sleep 30
