@@ -185,12 +185,14 @@ pipeline {
                             ec2-user@${publicIp}:/home/ec2-user/
                     """
                     sh(script: scpCommand)
+                    echo "Files copied to EC2 instance."
+
                     sh """
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ec2-user@${publicIp}
                         sleep 30
                         echo "DB_PASSWORD"=\${mysql_root} >> /home/ec2-user/.env
                     """
-                    echo "Files copied to EC2 instance."
+                    
                 }
             }
         }
