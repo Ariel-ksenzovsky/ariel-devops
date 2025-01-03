@@ -183,7 +183,7 @@ pipeline {
 
                         sh """
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
-                            ls /home/ec2-user/
+                            ls -la /home/ec2-user/
                         """
 
                         sh """
