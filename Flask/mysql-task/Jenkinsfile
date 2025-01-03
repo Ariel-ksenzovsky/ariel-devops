@@ -187,10 +187,10 @@ pipeline {
                     """
                     sh(script: scpCommand)
                     echo "Files copied to EC2 instance."
-                    }
                 }
             }
         }
+    }
         
         stage('Run Docker Container "deploy"') {
             steps {
