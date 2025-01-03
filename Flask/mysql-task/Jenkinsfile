@@ -201,19 +201,22 @@ pipeline {
         stage('Run Docker Container "deploy"') {
             steps {
                 script {
-                    // Run Docker container on the EC2 instance
-                    def containerCommand = """
-                        ssh -o StrictHostKeyChecking=no -i ${env.KEY_NAME} ec2-user@${publicIp} << 'EOF'
-                            # Run a sample Docker container compose
-                            docker compose up
-                        EOF
-                    """
-                    sh(script: containerCommand)
-                    echo "Docker container is running on EC2 instance."
+                    withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
+                        // Run Docker container on the EC2 instance
+                        def containerCommand = """
+                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} << 'EOF'
+                                # Run a sample Docker container compose
+                                docker compose up
+                                EOF
+                            """
+                        sh(script: containerCommand)
+                        echo "Docker container is running on EC2 instance."
+                    }
                 }
             }
         }
-    }
+
+        
     post {
         always {
             sh '''
