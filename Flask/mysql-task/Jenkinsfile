@@ -122,9 +122,11 @@ pipeline {
                         sudo systemctl start docker
                         sudo systemctl enable docker
 
-                        # Install Docker Compose
-                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                        sudo chmod +x /usr/local/bin/docker-compose
+                        COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name')
+
+                        # Install docker-compose
+                        sh -c "curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
+                        chmod +x /usr/local/bin/docker-compose
 
                         # Add ec2-user to the docker group to run docker without sudo
                         sudo usermod -a -G docker ec2-user
@@ -181,7 +183,7 @@ pipeline {
 
                         sh """
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
-                            echo "DB_PASSWORD=\${mysql_root}" >> /home/ec2-user/.env
+                            echo "DB_PASSWORD=\${DB_PASSWORD}" >> /home/ec2-user/.env
                         """
                         echo "DB_PASSWORD added to .env on EC2 instance."
         //             }
