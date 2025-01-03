@@ -176,19 +176,23 @@ pipeline {
 
                     // Use SCP to copy multiple files to the EC2 instance
                     withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
-                    def scpCommand = """
+                        sh "ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} 'mkdir -p /home/ec2-user'"
+                         def scpCommand = """
 
                         scp -i ${KEY_NAME} -o StrictHostKeyChecking=no \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/docker-compose.yml \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
                             ec2-user@${publicIp}:/home/ec2-user/
-                    """
-                    sh(script: scpCommand)
-                    echo "Files copied to EC2 instance."
+                        """
+                        sh(script: scpCommand)
+                        echo "Files copied to EC2 instance."
 
-                    sh "sleep 30"
-                    echo "DB_PASSWORD"=\${mysql_root} >> /home/ec2-user/.env
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
+                            'echo "DB_PASSWORD=\${mysql_root}" >> /home/ec2-user/.env'
+                        """
+                        echo "DB_PASSWORD added to .env on EC2 instance."
                 }
             }
         }
