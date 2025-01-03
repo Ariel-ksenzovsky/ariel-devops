@@ -178,7 +178,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
                     def scpCommand = """
                         scp -i ${KEY_NAME} -o StrictHostKeyChecking=no \
-                            /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task.docker-compose.yml \
+                            /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/docker-compose.yml \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
                             ec2-user@${publicIp}:/home/ec2-user/
