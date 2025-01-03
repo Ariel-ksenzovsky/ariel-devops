@@ -160,15 +160,6 @@ pipeline {
                         --region ${env.AWS_REGION}
                     """, returnStdout: true).trim()
                     echo "Instance Public IP: ${publicIp}"
-        //         }
-        //     }
-        // }
-
-        // stage('Copy Files to EC2 Instance') {
-        //     steps {
-        //         script {
-        //             sh 'sleep 30'
-
 
                     // Debug variables
                     echo "Public IP: ${publicIp}"
@@ -190,29 +181,30 @@ pipeline {
 
                         sh """
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
-                            'echo "DB_PASSWORD=\${mysql_root}" >> /home/ec2-user/.env'
+                            echo "DB_PASSWORD=\${mysql_root}" >> /home/ec2-user/.env
                         """
                         echo "DB_PASSWORD added to .env on EC2 instance."
-                    }
-                }
-            }
-        }
+        //             }
+        //         }
+        //     }
+        // }
         
-        stage('Run Docker Container "deploy"') {
-            steps {
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
-                        echo "Using Public IP: ${publicIp}"
-                        echo "Using SSH Key: ${KEY_NAME}"
-                        // Run Docker container on the EC2 instance
-                        def containerCommand = """
-                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} << EOF
-                                # Run a sample Docker container compose
-                                docker compose up -d
-                                EOF
-                            """
-                        sh(script: containerCommand)
-                        echo "Docker container is running on EC2 instance."
+        // stage('Run Docker Container "deploy"') {
+        //     steps {
+        //         script {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
+                            echo "Using Public IP: ${publicIp}"
+                            echo "Using SSH Key: ${KEY_NAME}"
+                            // Run Docker container on the EC2 instance
+                            def containerCommand = """
+                                ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} << EOF
+                                    # Run a sample Docker container compose
+                                    docker compose up -d
+                                    EOF
+                                """
+                            sh(script: containerCommand)
+                            echo "Docker container is running on EC2 instance."
+                        }
                     }
                 }
             }
