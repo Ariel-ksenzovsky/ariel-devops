@@ -183,6 +183,11 @@ pipeline {
 
                         sh """
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
+                            ls /home/ec2-user/
+                        """
+
+                        sh """
+                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
                             echo "DB_PASSWORD=\${DB_PASSWORD}" >> /home/ec2-user/.env
                         """
                         echo "DB_PASSWORD added to .env on EC2 instance."
