@@ -175,7 +175,7 @@ pipeline {
                     echo "Key Path: ${KEY_NAME}"
 
                     // Use SCP to copy multiple files to the EC2 instance
-                    withCredentials([file(credentialsId: 'instance-test', variable: 'KEY_NAME')]) {
+                    withCredentials([string(credentialsId: 'instance-test', variable: 'KEY_NAME')]) {
                     def scpCommand = """
                         scp -i ${KEY_NAME} -o StrictHostKeyChecking=no \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task.docker-compose.yml \
