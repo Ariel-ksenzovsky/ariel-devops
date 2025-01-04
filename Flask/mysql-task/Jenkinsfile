@@ -179,10 +179,11 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
                             'echo 'DB_PASSWORD=${DB_PASSWORD}' >> /home/ec2-user/.env'
                             sleep 10
-                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp}
+                        ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} << 'EOF'
                             pwd
                             sleep 30
                             docker-compose up -d
+                        EOF    
                         """
                     }
                 }
