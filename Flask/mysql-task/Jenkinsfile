@@ -206,7 +206,7 @@ pipeline {
                             def containerCommand = """
                                 ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} << EOF
                                     # Run a sample Docker container compose
-                                    docker compose up -d
+                                    docker-compose up -d
                                     EOF
                                 """
                             sh(script: containerCommand)
