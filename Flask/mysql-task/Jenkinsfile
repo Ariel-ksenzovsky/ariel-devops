@@ -211,11 +211,11 @@ pipeline {
                             """
                             sh(script: containerCommand)
                             echo "Docker container is running on EC2 instance."
-                        }
                     }
                 }
             }
         }
+    }
 
 
     post {
