@@ -191,17 +191,6 @@ pipeline {
                             'echo 'DB_PASSWORD=${DB_PASSWORD}' >> /home/ec2-user/.env'
                         """
                         echo "DB_PASSWORD added to .env on EC2 instance."
-                    }
-                }
-            }
-        }
-        
-        stage('Run Docker Container "deploy"') {
-            steps {
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
-                        echo "Using Public IP: ${publicIp}"
-                        echo "Using SSH Key: ${KEY_NAME}"
 
                         // Run Docker container on the EC2 instance
                         def containerCommand = """
