@@ -169,38 +169,19 @@ pipeline {
 
                     // Use SCP to copy multiple files to the EC2 instance
                     withCredentials([sshUserPrivateKey(credentialsId: 'instance-test', keyFileVariable: 'KEY_NAME', usernameVariable: 'ec2-user')]) {
-                        sh "ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} 'mkdir -p /home/ec2-user'"
-                         def scpCommand = """
-
+                        sh """
                         scp -i ${KEY_NAME} -o StrictHostKeyChecking=no \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/docker-compose.yml \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/init.sql \
                             /var/lib/jenkins/workspace/test1/ariel-devops/Flask/mysql-task/.env \
                             ec2-user@${publicIp}:/home/ec2-user/
-                        """
-                        sh(script: scpCommand)
-                        echo "Files copied to EC2 instance."
-
-                        sh """
-                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
-                            ls -la /home/ec2-user/
-                        """
-
-                        sh """
-                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp} \
+                            sleep 10
                             'echo 'DB_PASSWORD=${DB_PASSWORD}' >> /home/ec2-user/.env'
+                            sleep 10
+                        ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp}
+                            sleep 30
+                            docker-compose up -d
                         """
-                        echo "DB_PASSWORD added to .env on EC2 instance."
-
-                        // Run Docker container on the EC2 instance
-                        def containerCommand = """
-                            ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp}
-                                pwd
-                                sleep 30
-                                docker-compose up -d
-                        """
-                        sh(script: containerCommand)
-                        echo "Docker container is running on EC2 instance."
                     }
                 }
             }
