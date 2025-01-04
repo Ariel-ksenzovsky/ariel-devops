@@ -195,13 +195,7 @@ pipeline {
                         // Run Docker container on the EC2 instance
                         def containerCommand = """
                             ssh -o StrictHostKeyChecking=no -i ${KEY_NAME} ec2-user@${publicIp}
-                                # Ensure docker-compose is installed and accessible
-                                if ! command -v docker-compose &> /dev/null; then
-                                    echo "docker-compose not found!"
-                                    exit 1
-                                fi
-
-                                # Run the Docker Compose file
+                                sleep 30
                                 cd /home/ec2-user
                                 docker-compose up -d
                         """
