@@ -183,7 +183,7 @@ pipeline {
                             pwd
                             sleep 30
                             docker-compose up -d
-                        EOF    
+                        << EOF    
                         """
                     }
                 }
