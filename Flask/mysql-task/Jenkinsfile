@@ -180,6 +180,8 @@ pipeline {
                             pwd
                             sleep 10
                             export DB_PASSWORD='${DB_PASSWORD}'
+                            sleep 5
+                            cat env
                             sleep 30
                             docker-compose up -d
                         << EOF    
