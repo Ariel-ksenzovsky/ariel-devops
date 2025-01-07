@@ -180,10 +180,8 @@ pipeline {
                             pwd
                             sleep 10
                             export DB_PASSWORD='${DB_PASSWORD}'
-                            sleep 5
-                            sudo usermod -aG sudo ec2-user
                             sleep 30
-                            sudo docker-compose up -d
+                            sudo docker-compose up -d --quiet-pull
                         << EOF    
                         """
                     }
